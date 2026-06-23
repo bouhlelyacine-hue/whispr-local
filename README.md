@@ -10,10 +10,6 @@ Inspiré de Wispr Flow, mais open source, gratuit, et souverain.
 
 ## Pourquoi Whispr Local ?
 
-Les outils de dictée vocale en ligne (Wispr Flow, etc.) sont performants, mais ils envoient ton audio sur des serveurs tiers. Pour un usage professionnel où tu dictes des informations sensibles, c'est un risque.
-
-Whispr Local règle ce problème :
-
 | | Wispr Flow | Whispr Local |
 |---|---|---|
 | Coût | Abonnement payant | **Gratuit** |
