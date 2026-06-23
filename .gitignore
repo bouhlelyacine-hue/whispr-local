@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+ENV/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.spec
+
+# Fichiers audio temporaires (nettoyage automatique normalement)
+*.wav
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets / variables d'environnement
+.env
+.env.local
+
+# HuggingFace (modèles téléchargés — stockés dans ~/.cache, pas dans le projet)
+# Ajouté par précaution si quelqu'un change le cache path
+*.bin
+*.safetensors
