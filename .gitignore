@@ -43,3 +43,4 @@ settings.json
 # Ajouté par précaution si quelqu'un change le cache path
 *.bin
 *.safetensors
+history.json
