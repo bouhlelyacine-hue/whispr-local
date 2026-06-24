@@ -35,6 +35,10 @@ desktop.ini
 .env
 .env.local
 
+# Données utilisateur (ne jamais committer)
+history.enc
+settings.json
+
 # HuggingFace (modèles téléchargés — stockés dans ~/.cache, pas dans le projet)
 # Ajouté par précaution si quelqu'un change le cache path
 *.bin

@@ -7,6 +7,7 @@ import pyperclip
 import pystray
 from PIL import Image, ImageDraw
 
+import history as hist
 from config import HOTKEY
 from injector import inject_text
 from overlay import RecordingOverlay
@@ -42,13 +43,17 @@ class WhisprApp:
         self._lock = threading.Lock()
         self._history_widgets: list[ctk.CTkFrame] = []
 
+        settings = hist.load_settings()
+        self._save_history: bool = settings.get("save_history", False)
+
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
         self.root = ctk.CTk()
         self.root.title("Whispr Local")
         self.root.geometry("420x620")
-        self.root.resizable(False, True)
+        self.root.resizable(True, True)
+        self.root.minsize(380, 500)
         self.root.configure(fg_color="#0d1117")
         self.root.protocol("WM_DELETE_WINDOW", self._hide)
 
@@ -94,6 +99,13 @@ class WhisprApp:
             text_color="#484f58", hover_color="#21262d",
             command=self._clear_history,
         ).pack(side="right")
+        self._save_btn = ctk.CTkButton(
+            bar, width=100, height=22,
+            font=ctk.CTkFont(size=11),
+            command=self._toggle_save_history,
+        )
+        self._save_btn.pack(side="right", padx=(0, 6))
+        self._refresh_save_btn()
 
         self.hist_frame = ctk.CTkScrollableFrame(
             self.root, fg_color="#0d1117", corner_radius=0,
@@ -156,6 +168,36 @@ class WhisprApp:
     def set_transcriber(self, t: Transcriber) -> None:
         self.transcriber = t
         self.root.after(0, lambda: self._set_state("ready"))
+        if self._save_history:
+            self.root.after(0, self._load_history_from_file)
+
+    def _refresh_save_btn(self) -> None:
+        if self._save_history:
+            self._save_btn.configure(
+                text="💾 Actif", fg_color=("#1a5c2a", "#1a5c2a"),
+                hover_color=("#145222", "#145222"), text_color="#3fb950",
+                border_width=1, border_color="#238636",
+            )
+        else:
+            self._save_btn.configure(
+                text="💾 Inactif", fg_color="transparent",
+                hover_color="#21262d", text_color="#484f58",
+                border_width=1, border_color="#30363d",
+            )
+
+    def _toggle_save_history(self) -> None:
+        self._save_history = not self._save_history
+        hist.save_settings({"save_history": self._save_history})
+        self._refresh_save_btn()
+        if self._save_history:
+            self._load_history_from_file()
+
+    def _load_history_from_file(self) -> None:
+        for w in self._history_widgets:
+            w.destroy()
+        self._history_widgets.clear()
+        for entry in hist.load_entries():
+            self._add_entry(entry.get("text", ""), ts=entry.get("ts"), persist=False)
 
     def show_load_error(self, msg: str) -> None:
         print(f"[Whispr] ⚠ {msg}")
@@ -212,8 +254,10 @@ class WhisprApp:
         except AttributeError:
             pass
 
-    def _add_entry(self, text: str) -> None:
-        ts = datetime.now().strftime("%H:%M:%S")
+    def _add_entry(self, text: str, ts: str | None = None, persist: bool = True) -> None:
+        ts = ts or datetime.now().strftime("%H:%M:%S")
+        if persist and self._save_history:
+            hist.append_entry(ts, text)
         tb_height = min(max(44, (len(text) // 48 + 1) * 22), 110)
 
         card = ctk.CTkFrame(self.hist_frame, fg_color="#161b22", corner_radius=8)
@@ -253,6 +297,8 @@ class WhisprApp:
         for w in self._history_widgets:
             w.destroy()
         self._history_widgets.clear()
+        if self._save_history:
+            hist.clear_file()
 
     # ── RUN ───────────────────────────────────────────────
 

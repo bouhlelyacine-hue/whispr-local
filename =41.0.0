@@ -1,0 +1,8 @@
+Collecting cryptography
+  Downloading cryptography-49.0.0-cp311-abi3-win_amd64.whl.metadata (4.3 kB)
+Requirement already satisfied: cffi>=2.0.0 in C:\Users\bouhl\AppData\Local\Programs\Python\Python314\Lib\site-packages (from cryptography) (2.0.0)
+Requirement already satisfied: pycparser in C:\Users\bouhl\AppData\Local\Programs\Python\Python314\Lib\site-packages (from cffi>=2.0.0->cryptography) (3.0)
+Downloading cryptography-49.0.0-cp311-abi3-win_amd64.whl (3.8 MB)
+   ---------------------------------------- 3.8/3.8 MB 134.5 MB/s  0:00:00
+Installing collected packages: cryptography
+Successfully installed cryptography-49.0.0

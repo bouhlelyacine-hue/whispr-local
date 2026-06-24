@@ -11,7 +11,7 @@ class AudioRecorder:
     def __init__(self, sample_rate: int = SAMPLE_RATE):
         self.sample_rate = sample_rate
         self._stream = None
-        self._frames: list = []
+        self._frames: list[np.ndarray] = []
         self._total_samples = 0
         self._max_samples = MAX_RECORDING_SECONDS * sample_rate
 
