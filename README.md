@@ -106,7 +106,13 @@ Le texte est injecté directement dans l'application active (Claude, navigateur,
 
 ### Historique des transcriptions
 
-Chaque dictée est conservée dans le panneau historique avec :
+Par défaut, **aucune donnée n'est conservée sur le disque**. L'historique est uniquement affiché en mémoire le temps de la session.
+
+Pour activer la persistance, clique sur le bouton **"💾 Inactif"** dans l'interface — il passe en **"💾 Actif"**. Tu peux le désactiver à tout moment.
+
+Quand la sauvegarde est active, les transcriptions sont stockées dans un fichier `history.enc` **chiffré (AES-128 via Fernet)**. La clé de chiffrement est dérivée automatiquement depuis l'identité de ta machine (`COMPUTERNAME` + `USERNAME`) via PBKDF2 (200 000 itérations) — **aucune clé n'est stockée sur le disque**.
+
+Chaque entrée de l'historique contient :
 - L'heure de la transcription
 - Le texte éditable (tu peux le corriger avant de l'utiliser)
 - Un bouton **Copier** pour le mettre dans le presse-papiers
@@ -150,6 +156,7 @@ whispr-local/
 ├── recorder.py      # Capture audio depuis le microphone
 ├── transcriber.py   # Transcription via Whisper local
 ├── injector.py      # Injection du texte dans l'application active
+├── history.py       # Persistance chiffrée de l'historique (AES-128)
 ├── config.py        # Configuration (raccourci, langue, modèle)
 └── requirements.txt # Dépendances Python
 ```
@@ -167,6 +174,7 @@ whispr-local/
 | [customtkinter](https://github.com/TomSchimansky/CustomTkinter) | Interface graphique moderne |
 | [pystray](https://github.com/moses-palmer/pystray) | Icône dans la barre des tâches |
 | [Pillow](https://python-pillow.org) | Génération de l'icône tray |
+| [cryptography](https://cryptography.io) | Chiffrement AES-128 de l'historique (Fernet) |
 
 ---
 
